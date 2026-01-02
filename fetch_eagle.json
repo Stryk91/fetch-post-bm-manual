@@ -1,0 +1,95 @@
+{
+  "d": {
+    "id": "Fetch Eagle Button",
+    "uid": "FETCHEAGLE_SECURE01",
+    "regionType": "icon",
+    "anchorPoint": "CENTER",
+    "selfPoint": "CENTER",
+    "xOffset": 100,
+    "yOffset": -150,
+    "width": 50,
+    "height": 50,
+    "frameStrata": 3,
+    "icon": true,
+    "desaturate": false,
+    "zoom": 0,
+    "cooldown": true,
+    "cooldownTextDisabled": false,
+    "keepAspectRatio": true,
+    "internalVersion": 78,
+    "animation": {
+      "start": {"type": "none"},
+      "main": {
+        "type": "pulse",
+        "duration_type": "seconds",
+        "easeType": "none",
+        "easeStrength": 3,
+        "preset": "pulse",
+        "scalex": 1.08,
+        "scaley": 1.08
+      },
+      "finish": {"type": "none"}
+    },
+    "triggers": {
+      "1": {
+        "trigger": {
+          "type": "custom",
+          "custom_type": "stateupdate",
+          "check": "update",
+          "events": "SPELL_UPDATE_COOLDOWN CURSOR_CHANGED UPDATE_MOUSEOVER_UNIT PLAYER_TARGET_CHANGED",
+          "unit": "player",
+          "custom": "function(allstates, event)\n    local spellID = 1232995\n    \n    if not C_Spell.IsSpellUsable(spellID) then\n        allstates[\"\"] = {show = false, changed = true}\n        return true\n    end\n    \n    -- Try soft target unit tokens\n    local softUnit = nil\n    if UnitExists(\"softenemy\") then softUnit = \"softenemy\"\n    elseif UnitExists(\"softinteract\") then softUnit = \"softinteract\"\n    elseif UnitExists(\"mouseover\") and UnitIsDead(\"mouseover\") then softUnit = \"mouseover\"\n    end\n    \n    if not softUnit then\n        allstates[\"\"] = {show = false, changed = true}\n        return true\n    end\n    \n    if not UnitIsDead(softUnit) then\n        allstates[\"\"] = {show = false, changed = true}\n        return true\n    end\n    \n    -- Lootable check\n    local isLootable = true\n    if CanLootUnit then\n        local guid = UnitGUID(softUnit)\n        if guid then isLootable = CanLootUnit(guid) end\n    else\n        isLootable = not UnitIsFriend(\"player\", softUnit)\n    end\n    \n    if not isLootable then\n        allstates[\"\"] = {show = false, changed = true}\n        return true\n    end\n    \n    -- Check cooldown using new API\n    local cdInfo = C_Spell.GetSpellCooldown(spellID)\n    local isReady = not cdInfo or cdInfo.startTime == 0 or cdInfo.duration <= 1.5\n    \n    if isReady then\n        local icon = C_Spell.GetSpellTexture(spellID) or 132212\n        allstates[\"\"] = {\n            show = true,\n            changed = true,\n            icon = icon\n        }\n    else\n        allstates[\"\"] = {show = false, changed = true}\n    end\n    return true\nend"
+        },
+        "untrigger": {}
+      },
+      "activeTriggerMode": -10
+    },
+    "actions": {
+      "init": {
+        "do_custom": true,
+        "custom": "-- Create standalone secure button (always exists for macro)\nif not WA_FetchEagle_Btn then\n    local btn = CreateFrame(\"Button\", \"WA_FetchEagle_Btn\", UIParent, \"SecureActionButtonTemplate\")\n    btn:SetSize(1, 1)\n    btn:SetPoint(\"CENTER\", UIParent, \"CENTER\", -10000, -10000)\n    btn:SetAttribute(\"type\", \"spell\")\n    btn:SetAttribute(\"spell\", 1232995)\n    btn:SetAttribute(\"unit\", \"mouseover\")\n    btn:RegisterForClicks(\"AnyUp\", \"AnyDown\")\n    btn:Show()\nend\n-- Also make WA region clickable\nlocal region = aura_env.region\nif region and not region.fetchBtn then\n    local btn = CreateFrame(\"Button\", nil, region, \"SecureActionButtonTemplate\")\n    btn:SetAllPoints(region)\n    btn:SetAttribute(\"type\", \"spell\")\n    btn:SetAttribute(\"spell\", 1232995)\n    btn:SetAttribute(\"unit\", \"mouseover\")\n    btn:RegisterForClicks(\"AnyUp\", \"AnyDown\")\n    btn:SetFrameLevel(region:GetFrameLevel() + 10)\n    region.fetchBtn = btn\nend"
+      },
+      "start": {},
+      "finish": {}
+    },
+    "load": {
+      "use_class": true,
+      "class": {"single": "HUNTER", "multi": {}},
+      "use_spec": true,
+      "spec": {"single": 2, "multi": {}},
+      "use_spellknown": true,
+      "spellknown": 1232995,
+      "use_combat": false
+    },
+    "subRegions": [
+      {"type": "subbackground"},
+      {
+        "type": "subtext",
+        "text_text": "FETCH",
+        "text_color": [1, 0.85, 0, 1],
+        "text_font": "Friz Quadrata TT",
+        "text_fontSize": 11,
+        "text_fontType": "OUTLINE",
+        "text_anchorPoint": "BOTTOM",
+        "text_yOffset": -3
+      },
+      {
+        "type": "subglow",
+        "glow_type": "Pixel",
+        "glow_color": [1, 0.9, 0.2, 1],
+        "glow_lines": 8,
+        "glow_frequency": 0.25,
+        "glow_length": 10,
+        "glow_thickness": 2,
+        "glow_XOffset": 0,
+        "glow_YOffset": 0,
+        "glow_border": false
+      }
+    ],
+    "conditions": []
+  },
+  "c": [],
+  "m": "d",
+  "s": "5.17.0",
+  "v": 2000
+}
