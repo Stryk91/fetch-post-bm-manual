@@ -17,6 +17,7 @@
     "cooldownTextDisabled": false,
     "keepAspectRatio": true,
     "internalVersion": 78,
+    "tocversion": 110207,
     "animation": {
       "start": {"type": "none"},
       "main": {
