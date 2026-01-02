@@ -51,6 +51,8 @@ This WeakAura creates a SecureActionButton that casts by **Spell ID** (1232995),
 - Standalone SecureActionButton parented to UIParent (always available for `/click`)
 - Region overlay button for clicking the WA icon directly
 - Unit attribute set to "mouseover" for flexible targeting
+- **Event-driven** - triggers on soft target/mouseover changes, not every frame
+- Lightweight 0.25s ticker for edge cases (4 checks/sec vs 60+/sec frame-based)
 
 ## Requirements
 
