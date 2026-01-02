@@ -60,4 +60,4 @@ This WeakAura creates a SecureActionButton that casts by **Spell ID** (1232995),
 
 ## Credits
 
-Built with [wa-encoder-rs](https://github.com/stryk/wa-encoder-rs) - Native Rust WeakAura encoder/decoder.
+Built with [wa-encoder-rs](https://github.com/Stryk91/wa-encoder-rs) - Native Rust WeakAura encoder/decoder.
