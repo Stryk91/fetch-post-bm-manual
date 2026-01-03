@@ -1,65 +1,37 @@
 # Fetch (Post-BM Manual)
 
-WeakAura + Secure Button for Marksmanship Hunter's **Fetch: Eagle** (Spell ID 1232995).
+WeakAura for MM Hunter Fetch: Eagle (Spell ID 1232995). Fixes the broken `/cast Fetch` macro after learning BM manual.
 
-## The Problem
+## Problem
 
-After learning "Fetch" from the Beast Mastery manual at Trueshot Lodge in Highmountain, the normal `/cast Fetch` macro stops working for Marksmanship Hunters. This is because there are multiple "Fetch" spells:
+Three spells named "Fetch" exist. WoW macros use names, not IDs. `/cast Fetch` becomes ambiguous.
 
-| Spell ID | Name | Notes |
-|----------|------|-------|
-| 125050 | Fetch | Pet ability (BM) |
-| 125048 | Fetch | Trigger spell |
-| 1232995 | Fetch: Eagle | MM Spotting Eagle version |
+| Spell ID | Name | Source |
+|----------|------|--------|
+| 125050 | Fetch | BM Pet |
+| 125048 | Fetch | Trigger |
+| 1232995 | Fetch: Eagle | MM Spotting Eagle |
 
-WoW's macro system only accepts spell **names**, not IDs - so `/cast Fetch` becomes ambiguous.
+## Solution
 
-## The Solution
+SecureActionButton casts by Spell ID, bypassing name conflict.
 
-This WeakAura creates a SecureActionButton that casts by **Spell ID** (1232995), bypassing the name conflict.
-
-## Features
-
-- Shows icon when:
-  - You have a soft target or mouseover that's dead
-  - Target is lootable
-  - Fetch: Eagle is off cooldown
-- Clickable WA icon
-- Macro-compatible secure button
-- Supports `@mouseover` targeting
-
-## Installation
+## Install
 
 1. Import `fetch_eagle.txt` into WeakAuras
-2. Create this macro:
-
-```
-#showtooltip
-/click WA_FetchEagle_Btn LeftButton 1
-```
-
-3. Bind the macro to a key
-
-## Files
-
-- `fetch_eagle.json` - Source JSON (for editing)
-- `fetch_eagle.txt` - WA import string
-
-## Technical Details
-
-- Uses TWW API: `C_Spell.GetSpellCooldown()`, `C_Spell.IsSpellUsable()`, `C_Spell.GetSpellTexture()`
-- Standalone SecureActionButton parented to UIParent (always available for `/click`)
-- Region overlay button for clicking the WA icon directly
-- Unit attribute set to "mouseover" for flexible targeting
-- **Event-driven** - triggers on soft target/mouseover changes, not every frame
-- Lightweight 0.25s ticker for edge cases (4 checks/sec vs 60+/sec frame-based)
+2. Create macro:
+   ```
+   #showtooltip
+   /click WA_FetchEagle_Btn LeftButton 1
+   ```
+3. Bind to key
 
 ## Requirements
 
 - WeakAuras 5.17+
-- Hunter class, Marksmanship spec
-- Fetch: Eagle spell learned (Trueshot Lodge manual)
+- MM Hunter with Fetch: Eagle learned (Trueshot Lodge manual)
 
-## Credits
+## Files
 
-Built with [wa-encoder-rs](https://github.com/Stryk91/wa-encoder-rs) - Native Rust WeakAura encoder/decoder.
+- `fetch_eagle.json` - Source
+- `fetch_eagle.txt` - Import string
